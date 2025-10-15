@@ -11,11 +11,12 @@ function App() {
       <div className="min-h-screen bg-white">
         <Header />
         <Categories />
-        
+
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
+            {/* Corrected the route to use ProductDetail */}
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
@@ -23,7 +24,7 @@ function App() {
         </main>
 
         {isOpen && <CartSidebar />}
-        
+
         {/* Footer */}
         <footer className="bg-gray-900 text-white py-12">
           <div className="container mx-auto px-4">

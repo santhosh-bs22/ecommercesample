@@ -13,9 +13,11 @@ export const ProductDetail: React.FC = () => {
   const [selectedImage, setSelectedImage] = React.useState(0);
   const [quantity, setQuantity] = React.useState(1);
 
+  // Find the product only after products have been loaded
   const product = products.find(p => p.id === Number(id));
-  
-  if (loading) {
+
+  // Show a loading spinner while fetching or if products array is still empty
+  if (loading || products.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner text="Loading product details..." />
@@ -23,6 +25,7 @@ export const ProductDetail: React.FC = () => {
     );
   }
 
+  // If after loading, the product is still not found, show an error
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -39,6 +42,7 @@ export const ProductDetail: React.FC = () => {
     );
   }
 
+  // The rest of your component logic remains the same
   const normalized = normalizeProduct(product);
   const images = normalized.images;
 
@@ -72,7 +76,6 @@ export const ProductDetail: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        {/* Breadcrumb */}
         <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-8">
           <Link to="/" className="hover:text-primary-600">Home</Link>
           <span>/</span>
@@ -84,7 +87,6 @@ export const ProductDetail: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
           <div className="space-y-4">
-            {/* Main Image */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
               <img
                 src={images[selectedImage]}
@@ -93,7 +95,6 @@ export const ProductDetail: React.FC = () => {
               />
             </div>
 
-            {/* Thumbnails */}
             {images.length > 1 && (
               <div className="flex space-x-2 overflow-x-auto">
                 {images.map((image, index) => (
@@ -101,8 +102,8 @@ export const ProductDetail: React.FC = () => {
                     key={index}
                     onClick={() => setSelectedImage(index)}
                     className={`flex-shrink-0 w-20 h-20 rounded-lg border-2 overflow-hidden transition-all ${
-                      selectedImage === index 
-                        ? 'border-primary-600 scale-105' 
+                      selectedImage === index
+                        ? 'border-primary-600 scale-105'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -123,7 +124,6 @@ export const ProductDetail: React.FC = () => {
               <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
                 {normalized.name}
               </h1>
-              
               <div className="flex items-center space-x-4 mb-4">
                 <div className="flex items-center">
                   {renderStars(normalized.rating)}
@@ -134,7 +134,6 @@ export const ProductDetail: React.FC = () => {
                 <span className="text-gray-400">•</span>
                 <span className="text-green-600 font-semibold">In Stock</span>
               </div>
-
               <div className="flex items-center space-x-4 mb-6">
                 <span className="text-4xl font-bold text-primary-600">
                   {formatPrice(normalized.price)}
@@ -146,12 +145,9 @@ export const ProductDetail: React.FC = () => {
                 )}
               </div>
             </div>
-
             <p className="text-gray-700 leading-relaxed text-lg">
               {normalized.description}
             </p>
-
-            {/* Quantity Selector */}
             <div className="flex items-center space-x-4">
               <span className="text-lg font-semibold text-gray-900">Quantity:</span>
               <div className="flex items-center space-x-3">
@@ -172,8 +168,6 @@ export const ProductDetail: React.FC = () => {
                 </button>
               </div>
             </div>
-
-            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 onClick={handleAddToCart}
@@ -182,7 +176,6 @@ export const ProductDetail: React.FC = () => {
               >
                 Add {quantity} to Cart - {formatPrice(normalized.price * quantity)}
               </Button>
-              
               <div className="flex space-x-2">
                 <Button variant="outline" size="lg">
                   <Heart className="w-5 h-5" />
@@ -192,8 +185,6 @@ export const ProductDetail: React.FC = () => {
                 </Button>
               </div>
             </div>
-
-            {/* Product Specifications */}
             <div className="bg-white rounded-xl p-6 space-y-4">
               <h3 className="text-xl font-semibold text-gray-900">Specifications</h3>
               <div className="grid grid-cols-2 gap-4">
@@ -219,8 +210,6 @@ export const ProductDetail: React.FC = () => {
                 )}
               </div>
             </div>
-
-            {/* Additional Info */}
             <div className="bg-primary-50 rounded-xl p-6">
               <h4 className="font-semibold text-primary-900 mb-2">Delivery Information</h4>
               <ul className="text-primary-700 space-y-1 text-sm">
@@ -236,5 +225,4 @@ export const ProductDetail: React.FC = () => {
     </div>
   );
 };
-
 export default ProductDetail;
