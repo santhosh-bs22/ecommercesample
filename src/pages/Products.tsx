@@ -1,8 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Filter, Grid, List } from 'lucide-react';
 import { useProducts } from '@/hooks';
 import { ProductGrid, LoadingSpinner } from '@/components';
 import { Button } from '@/components/ui';
+import { normalizeProduct, formatPrice } from '@/utils/helpers'; // Ensure these are imported
 
 export const Products: React.FC = () => {
   const { filteredProducts, loading, filters, setFilters, categories } = useProducts();
@@ -152,7 +154,7 @@ export const Products: React.FC = () => {
             </div>
           </div>
 
-          {/* Products Grid */}
+          {/* Products Grid/List */}
           <div className="flex-1">
             {viewMode === 'grid' ? (
               <ProductGrid products={filteredProducts} loading={loading} />
@@ -161,31 +163,38 @@ export const Products: React.FC = () => {
                 {loading ? (
                   <LoadingSpinner text="Loading products..." />
                 ) : (
-                  filteredProducts.map((product) => (
-                    <div key={product.id} className="bg-white rounded-xl shadow-lg p-6 flex items-center space-x-6">
-                      <img
-                        src={'image' in product ? product.image : product.thumbnail}
-                        alt={'title' in product ? product.title : product.title}
-                        className="w-24 h-24 object-cover rounded-lg"
-                      />
-                      <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                          {'title' in product ? product.title : product.title}
-                        </h3>
-                        <p className="text-gray-600 mb-3 line-clamp-2">
-                          {product.description}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-2xl font-bold text-primary-600">
-                            ${product.price}
-                          </span>
-                          <span className="text-sm text-gray-500 capitalize">
-                            {product.category}
-                          </span>
+                  filteredProducts.map((product) => {
+                    const normalized = normalizeProduct(product);
+                    return (
+                      <Link
+                        key={normalized.uniqueId} // Use uniqueId for key
+                        to={`/product/${normalized.uniqueId}`} // Use uniqueId for link
+                        className="block bg-white rounded-xl shadow-lg p-6 flex items-center space-x-6 hover:shadow-xl transition-shadow cursor-pointer"
+                      >
+                        <img
+                          src={normalized.image}
+                          alt={normalized.name}
+                          className="w-24 h-24 object-cover rounded-lg"
+                        />
+                        <div className="flex-1">
+                          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                            {normalized.name}
+                          </h3>
+                          <p className="text-gray-600 mb-3 line-clamp-2">
+                            {normalized.description}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-2xl font-bold text-primary-600">
+                              {formatPrice(normalized.price)}
+                            </span>
+                            <span className="text-sm text-gray-500 capitalize">
+                              {normalized.category}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))
+                      </Link>
+                    );
+                  })
                 )}
               </div>
             )}

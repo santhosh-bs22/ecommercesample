@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Star, Plus } from 'lucide-react';
 import { ProductItem } from '@/types';
 import { useCart } from '@/hooks';
@@ -13,7 +14,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addItem } = useCart();
   const normalized = normalizeProduct(product);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Stop the click event from propagating up to the Link component
+    e.stopPropagation();
     addItem({
       id: normalized.id,
       name: normalized.name,
@@ -39,7 +42,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
+    // Use normalized.uniqueId for the Link
+    <Link
+      to={`/product/${normalized.uniqueId}`}
+      className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group"
+    >
       <div className="relative overflow-hidden">
         <img
           src={normalized.image}
@@ -47,7 +54,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
         />
         <div className="absolute top-2 right-2">
-          <span className="bg-primary-600 text-white text-xs px-2 py-1 rounded-full">
+          <span className="bg-primary-600 text-white text-xs px-2 py-1 rounded-full capitalize">
             {normalized.category}
           </span>
         </div>
@@ -65,7 +72,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-1">
             {renderStars(normalized.rating)}
-            <span className="text-gray-600 text-sm ml-1">({normalized.rating})</span>
+            <span className="text-gray-600 text-sm ml-1">({normalized.rating.toFixed(1)})</span>
           </div>
           <span className="text-2xl font-bold text-gray-900">
             {formatPrice(normalized.price)}
@@ -80,7 +87,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           Add to Cart
         </Button>
       </div>
-    </div>
+    </Link>
   );
 };
 

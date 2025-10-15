@@ -65,7 +65,10 @@ export const useProductStore = create<ProductState>((set, get) => ({
       
       const allCategories = [
         'all',
-        ...new Set([...fakeStoreCategories, ...dummyJsonCategories])
+        ...new Set(
+          [...fakeStoreCategories, ...dummyJsonCategories]
+            .filter(c => typeof c === 'string' && c.trim() !== '') // FIX: Filter out non-string and empty values
+        )
       ];
       set({ categories: allCategories });
     } catch (error) {

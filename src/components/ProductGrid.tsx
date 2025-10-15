@@ -2,6 +2,7 @@ import React from 'react';
 import { ProductItem } from '@/types';
 import { ProductCard } from './ProductCard';
 import { LoadingSpinner } from './LoadingSpinner';
+import { getProductUniqueId } from '@/utils/helpers'; // Import helper
 
 interface ProductGridProps {
   products: ProductItem[];
@@ -33,7 +34,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {products.map((product) => (
         <ProductCard
-          key={`${product.id}-${'image' in product ? 'fs' : 'dj'}`}
+          key={getProductUniqueId(product)} // Uses the unique ID for stability
           product={product}
         />
       ))}

@@ -16,7 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
-            {/* Corrected the route to use ProductDetail */}
+            {/* FIX: Changed the route parameter to :id or similar to match the uniqueId format which includes a hyphen (e.g., fs-1, dj-100) */}
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
