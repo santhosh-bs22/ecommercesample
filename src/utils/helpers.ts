@@ -1,4 +1,4 @@
-import { Product, DummyJsonProduct, ProductItem } from '@/types'; // RESTORED IMPORTS
+import { ProductItem } from '@/types'; // RESTORED IMPORTS
 
 export const formatPrice = (price: number): string => {
   return new Intl.NumberFormat('en-US', {
